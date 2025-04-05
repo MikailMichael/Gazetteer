@@ -8,18 +8,26 @@
 		<meta name="author" content="Mikail">
 		<meta name="description" content="GeoNames API Examples | Course Task">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">		<link href="favicon.png" rel="icon">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+    crossorigin="anonymous">	
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">	
+    <link href="favicon.png" rel="icon">
 		<link href="libs/css/style.css" rel="stylesheet">
 	</head>
 
 	<body>
-    <div class="container-xxl-12 text-center bg-dark">
+    <div class="container-xxl-12 h-100 d-flex flex-column text-center">
       <!-- Drop down Box of Countries -->
-			<div class="row justify-content-center">
+			<div class="row h-10 bg-dark text-white align-items-center">
+          <!-- Country Select Box Column -->
           <div class="col-auto">
             <div class="form-floating">
-              <select class="form-select bg-success text-white" id="selectCountry">
+              <select class="form-select text-center ms-2 my-2" id="selectCountry">
                 <!-- Populate from php call that returns only the codes and names from the countryborder GeoJSON file -->
                 <option value="AF">Afghanistan</option>
                 <option value="GB">Great Britain</option>
@@ -28,20 +36,272 @@
               <label for="selectCountry">Choose a Country</label>
             </div>
           </div>
+
+          <!-- Country Column -->
+          <div class="col">
+            <h3>Current Location:</h3>
+          </div>
+
+          <div class="col">
+            <div id="country"></div>
+          </div>
+
+          <div class="col">
+            <div id="state"></div>
+          </div>
+          
+          <div class="col">
+            <div id="city"></div>
+          </div>
 			</div>
       
       <!-- Map -->
-      <div class="row">
+      <div class="row flex-grow-1 bg-dark">
         <div class="col">
+          <div id="map"></div>
           
+          <!-- General Info Modal -->
+          <div id="generalInfo" class="modal" data-bs-backdrop="false" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content shadow">
+                <div class="modal-header bg-success bg-gradient text-white">
+                  <h5 class="modal-title">General Info</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-striped">
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-globe fa-xl text-success"></i></td>
+                      <td>Country</td>
+                      <td id="countryName" class="text-end">Select a Country</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-success"></i></td>
+                      <td>Capital</td>
+                      <td id="capital" class="text-end">Select a Country</td>
+                    </tr>  
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-mountain-sun fa-xl text-success"></i></td>
+                      <td>Continent</td>
+                      <td id="continent" class="text-end">Select a Country</td>
+                    </tr> 
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-code fa-xl text-success"></i></td>
+                      <td>Country-Code</td>
+                      <td id="countryCode" class="text-end">Select a Country</td>
+                    </tr> 
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-calendar fa-xl text-success"></i></td>
+                      <td>Timezone</td>
+                      <td id="timezone" class="text-end">Select a Country</td>
+                    </tr> 
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-ruler-combined fa-xl text-success"></i></td>
+                      <td>Country Size</td>
+                      <td id="size" class="text-end">Select a Country</td>
+                    </tr> 
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-phone fa-xl text-success"></i></td>
+                      <td>Phone Code</td>
+                      <td id="phoneCode" class="text-end">Select a Country</td>
+                    </tr>            
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Population Modal -->
+          <div id="populationInfo" class="modal" data-bs-backdrop="false" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content shadow">
+                <div class="modal-header bg-primary bg-gradient text-white">
+                  <h5 class="modal-title">Population</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-striped">
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-person fa-xl text-primary"></i></td>
+                      <td>Country Population</td>
+                      <td id="countryPop" class="text-end">Select a Country</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
+                      <td>Metropolitan Cities</td>
+                      <td class="text-end">(Atleast 500,000 population)</td>
+                    </tr>  
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
+                      <td>City 1</td>
+                      <td id="city1" class="text-end">Select a Country</td>
+                    </tr> 
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
+                      <td>City 2</td>
+                      <td id="city2" class="text-end">Select a Country</td>
+                    </tr>   
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
+                      <td>City 3</td>
+                      <td id="city3" class="text-end">Select a Country</td>
+                    </tr>   
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
+                      <td>City 4</td>
+                      <td id="city4" class="text-end">Select a Country</td>
+                    </tr>   
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
+                      <td>City 5</td>
+                      <td id="city5" class="text-end">Select a Country</td>
+                    </tr>   
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
+                      <td>City 6</td>
+                      <td id="city6" class="text-end">Select a Country</td>
+                    </tr>   
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
+                      <td>City 7</td>
+                      <td id="city7" class="text-end">Select a Country</td>
+                    </tr>   
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
+                      <td>City 8</td>
+                      <td id="city8" class="text-end">Select a Country</td>
+                    </tr>   
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
+                      <td>City 9</td>
+                      <td id="city9" class="text-end">Select a Country</td>
+                    </tr>   
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
+                      <td>City 10</td>
+                      <td id="city10" class="text-end">Select a Country</td>
+                    </tr>               
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weather Modal -->
+          <div id="weatherInfo" class="modal" data-bs-backdrop="false" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content shadow">
+                <div class="modal-header bg-warning bg-gradient text-white">
+                  <h5 class="modal-title">Current Weather</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-striped">
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-sun fa-xl text-warning"></i></td>
+                      <td>Weather</td>
+                      <td id="weather" class="text-end">Select a Country</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-temperature-half fa-xl text-warning"></i></td>
+                      <td>Temperature (Celsius)</td>
+                      <td id="temperature" class="text-end">Select a Country</td>
+                    </tr>  
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-wind fa-xl text-warning"></i></td>
+                      <td>Wind Speed (m/s)</td>
+                      <td id="wind" class="text-end">Select a Country</td>
+                    </tr> 
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-cloud fa-xl text-warning"></i></td>
+                      <td>Cloudiness Percentage</td>
+                      <td id="cloud" class="text-end">Select a Country</td>
+                    </tr>          
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-warning btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Currency Info Modal -->
+          <div id="currencyInfo" class="modal" data-bs-backdrop="false" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content shadow">
+                <div class="modal-header bg-danger bg-gradient text-white">
+                  <h5 class="modal-title">Currency Info</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-striped">
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-coins fa-xl text-danger"></i></td>
+                      <td>Currency</td>
+                      <td id="currency" class="text-end">Select a Country</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-money-bill-1 fa-xl text-danger"></i></td>
+                      <td>Iso-Code</td>
+                      <td id="currencyCode" class="text-end">Select a Country</td>
+                    </tr>  
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-dollar-sign fa-xl text-danger"></i></td>
+                      <td>Symbol</td>
+                      <td id="currencySymbol" class="text-end">Select a Country</td>
+                    </tr> 
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-money-bill-transfer fa-xl text-danger"></i></td>
+                      <td>Exchange Rate to USD</td>
+                      <td id="exchangeRate" class="text-end">Select a Country</td>
+                    </tr>      
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flag Modal -->
+          <div id="flagInfo" class="modal" data-bs-backdrop="false" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content shadow">
+                <div class="modal-header bg-info bg-gradient text-white">
+                  <h5 class="modal-title">Flag</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <img id="flag" src="https://commons.wikimedia.org/wiki/Special:FilePath/Flag_of_the_United_Kingdom.svg">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- End of Modals -->
+
         </div>
       </div>
-		</div>
 
 		<div id="preloader"></div>
-			
+
+    <script src="https://kit.fontawesome.com/ad455a77c4.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>	
 		<script type="application/javascript" src="libs/js/jquery-2.2.3.min.js"></script>
-		<script type="application/javascript" src="libs/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+		<script type="module" src="libs/js/script.js"></script>
 	</body>
 
 </html>
