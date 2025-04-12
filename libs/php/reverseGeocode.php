@@ -2,7 +2,7 @@
 	$executionStartTime = microtime(true);
 
 	// Creates url for the API call with the entered parameters, passed via data section in AJAX call in script.js
-	$url='http://api.opencagedata.com/geocode/v1/json?q=' . $_REQUEST['lat'] . '+' . $_REQUEST['lng'] . '&key=c7986c6dae164f21b343df5549153a22';
+	$url='http://api.opencagedata.com/geocode/v1/json?q=' . $_REQUEST['lat'] . '+' . $_REQUEST['lng'] . '&key=87195934cb7444688d83a3d7eef993d2';
 
 	// Init cURL obj, sets common parameters
 	$ch = curl_init();
@@ -36,7 +36,7 @@
 			$output['data'] = null;			 
 		} else {
 			if($decode['status']['code'] != 200) {
-				$output['status']['code'] = $decode['satus']['code'];
+				$output['status']['code'] = $decode['status']['code'];
 				$output['status']['name'] = "Failure - API";
 				$output['status']['description'] = $decode['status']['message'];
 				$output['status']['seconds'] = number_format((microtime(true) - $executionStartTime), 3);
