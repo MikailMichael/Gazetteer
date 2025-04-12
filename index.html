@@ -9,53 +9,30 @@
 		<meta name="description" content="GeoNames API Examples | Course Task">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" 
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
-    crossorigin="anonymous">	
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">	
-    <link href="favicon.png" rel="icon">
-		<link href="libs/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="./node_modules/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css"/>	
+    <link rel="stylesheet" href="./node_modules/leaflet-easybutton/src/easy-button.css">	
+    <link rel="stylesheet" href="./node_modules//leaflet.markercluster/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="./node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css">
+    <link rel="icon" href="./assets/favicon.png">
+		<link rel="stylesheet" href="libs/css/style.css">
 	</head>
 
 	<body>
+    <div id="pre-load"></div>
+
     <div class="container-xxl-12 h-100 d-flex flex-column text-center">
-      <!-- Drop down Box of Countries -->
-			<div class="row h-10 bg-dark text-white align-items-center">
-          <!-- Country Select Box Column -->
-          <div class="col-md-3 col-sm-12">
-            <div class="form-floating mx-2">
-              <select class="form-select text-center my-2" id="selectCountry">
-                <!-- Populate from php call that returns only the codes and names from the countryborder GeoJSON file -->
-                <option class="option" value="placeHolder" id="placeHolder">Loading Countries...</option>
-              </select>
-              <label for="selectCountry">Choose a Country</label>
-            </div>
-          </div>
 
-          <!-- Country Column -->
-          <div class="col-sm-3">
-            <h3>Current Location:</h3>
-          </div>
-
-          <div class="col-sm-3 col-md-2">
-            <div id="country"></div>
-          </div>
-
-          <div class="col-sm-3 col-md-2">
-            <div id="state"></div>
-          </div>
-          
-          <div class="col-sm-3 col-md-2">
-            <div id="city"></div>
-          </div>
-			</div>
-      
-      <!-- Map -->
       <div class="row flex-grow-1 bg-dark">
         <div class="col">
+          <!-- Select Box -->
+          <div id ='selectContainer' class="top-0 start-50 translate-middle-x">
+            <select class="form-select" id="selectCountry" val="">
+              <!-- Populate from php call that returns only the codes and names from the countryborder GeoJSON file -->
+            </select>
+          </div>
+
+          <!-- Map -->
           <div id="map"></div>
           
           <!-- General Info Modal -->
@@ -70,72 +47,64 @@
                   <table class="table table-striped">
                     <tr>
                       <td class="text-center"><i class="fa-solid fa-globe fa-xl text-success"></i></td>
-                      <td>Country</td>
+                      <td class="text-start">Country</td>
                       <td id="countryName" class="text-end">Select a Country</td>
                     </tr>
                     <tr>
                       <td class="text-center"><i class="fa-solid fa-city fa-xl text-success"></i></td>
-                      <td>Capital</td>
+                      <td class="text-start">Capital City</td>
                       <td id="capital" class="text-end">Select a Country</td>
                     </tr>  
                     <tr>
                       <td class="text-center"><i class="fa-solid fa-mountain-sun fa-xl text-success"></i></td>
-                      <td>Continent</td>
+                      <td class="text-start">Continent</td>
                       <td id="continent" class="text-end">Select a Country</td>
                     </tr> 
                     <tr>
                       <td class="text-center"><i class="fa-solid fa-code fa-xl text-success"></i></td>
-                      <td>ISO-Code 2 Digits</td>
+                      <td class="text-start">ISO-Code 2 Digits</td>
                       <td id="countryCode" class="text-end">Select a Country</td>
                     </tr> 
                     <tr>
-                      <td class="text-center"><i class="fa-solid fa-calendar fa-xl text-success"></i></td>
-                      <td>Timezone</td>
-                      <td id="timezone" class="text-end">Select a Country</td>
-                    </tr> 
-                    <tr>
                       <td class="text-center"><i class="fa-solid fa-ruler-combined fa-xl text-success"></i></td>
-                      <td>Country Size</td>
+                      <td class="text-start">Area (km&sup2)</td>
                       <td id="size" class="text-end">Select a Country</td>
-                    </tr> 
+                    </tr>
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-person fa-xl text-success"></i></td>
+                      <td class="text-start">Population</td>
+                      <td id="countryPop" class="text-end">Select a Country</td>
+                    </tr>  
                     <tr>
                       <td class="text-center"><i class="fa-solid fa-phone fa-xl text-success"></i></td>
-                      <td>Phone Code</td>
+                      <td class="text-start">Phone Code</td>
                       <td id="phoneCode" class="text-end">Select a Country</td>
-                    </tr>            
+                    </tr>    
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-coins fa-xl text-success"></i></td>
+                      <td class="text-start">Currency</td>
+                      <td id="currency" class="text-end">Select a Country</td>
+                    </tr>
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-money-bill fa-xl text-success"></i></td>
+                      <td class="text-start">Currency Code</td>
+                      <td id="currencyCode" class="text-end">Select a Country</td>
+                    </tr>  
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-dollar-sign fa-xl text-success"></i></td>
+                      <td class="text-start">Symbol</td>
+                      <td id="currencySymbol" class="text-end">Select a Country</td>
+                    </tr>  
+                    <tr>
+                      <td class="text-center"><i class="fa-solid fa-money-bill-transfer fa-xl text-success"></i></td>
+                      <td class="text-start">Exchange Rate to 1 USD</td>
+                      <td id="exchangeRate" class="text-end">Select a Country</td>
+                    </tr>       
                   </table>
+                  <img id="flag" class="border border-2 border-dark" src="">
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Population Modal -->
-          <div id="populationInfo" class="modal" data-bs-backdrop="false" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-              <div class="modal-content shadow">
-                <div class="modal-header bg-primary bg-gradient text-white">
-                  <h5 class="modal-title">Population</h5>
-                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <table id="popTable" class="table table-striped">
-                    <tr>
-                      <td class="text-center"><i class="fa-solid fa-person fa-xl text-primary"></i></td>
-                      <td>Country Population</td>
-                      <td id="countryPop" class="text-end">Select a Country</td>
-                    </tr>
-                    <tr>
-                      <td class="text-center"><i class="fa-solid fa-city fa-xl text-primary"></i></td>
-                      <td>Metropolitan Cities</td>
-                      <td class="text-end">(Atleast 500,000 population)</td>
-                    </tr>            
-                  </table>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Close</button>
                 </div>
               </div>
             </div>
@@ -146,38 +115,66 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content shadow">
                 <div class="modal-header bg-warning bg-gradient text-white">
-                  <h5 class="modal-title">Current Weather</h5>
+                  <h5 class="modal-title" id="weatherModalLabel">Current Weather</h5>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <table class="table table-striped">
-                    <tr>
-                      <td class="text-center"><i class="fa-solid fa-sun fa-xl text-warning"></i></td>
-                      <td>Weather</td>
-                      <td id="weather" class="text-end">Select a Country</td>
-                    </tr>
-                    <tr>
-                      <td class="text-center"><i class="fa-solid fa-cloud-sun fa-xl text-warning"></i></td>
-                      <td>Description</td>
-                      <td id="weatherDescription" class="text-end">Select a Country</td>
-                    </tr>
-                    <tr>
-                      <td class="text-center"><i class="fa-solid fa-temperature-half fa-xl text-warning"></i></td>
-                      <td>Temperature (Celsius)</td>
-                      <td id="temperature" class="text-end">Select a Country</td>
-                    </tr>  
-                    <tr>
-                      <td class="text-center"><i class="fa-solid fa-wind fa-xl text-warning"></i></td>
-                      <td>Wind Speed (m/s)</td>
-                      <td id="wind" class="text-end">Select a Country</td>
-                    </tr> 
-                    <tr>
-                      <td class="text-center"><i class="fa-solid fa-cloud fa-xl text-warning"></i></td>
-                      <td>Cloudiness Percentage</td>
-                      <td id="cloud" class="text-end">Select a Country</td>
-                    </tr>          
-                  </table>
+                  <!-- Today's Weather -->
+                  <div class="row">
+                    <div class="col border m-2  weather-bg">
+                      <p class="fw-bold fs-5 mt-1 text-start">TODAY</p>
+                      <div class="row weather-bg">
+                        <div class="col text-center m-3">
+                          <p id="todayConditions" class="fw-bold fs-6"></p> 
+                        </div>
+                        <div class="col text-center">
+                          <img id="weatherIcon" class="img-fluid mt-0" src="" alt="" title="">
+                        </div>              
+                        <div class="col text-center">
+                          <p class="fw-bold fs-4 mb-0"><span id="todayMaxTemp"></span><sup>o</sup><span class="tempMetric">c</span></p>
+                          <p class="fs-5 mt-0 text-secondary"><span id="todayMinTemp"></span><sup>o</sup><span class="tempMetric">c</span></p>
+                        </div>              
+                      </div>
+                    </div>   
+                  </div>
+                  
+                  <!-- Next 2 Days Weather -->
+                  <div class="row">
+                    <div class="col border m-2">
+                      <div class="row weather-bg"> 
+                        <div class="col text-center">
+                          <p id="day1Date" class="fw-bold fs-6 mt-3"></p>
+                        </div>
+                      </div>
+                      <div class="row weather-bg">
+                        <div class="col text-center">
+                          <p class="fw-bold fs-4 mb-0"><span id="day1MaxTemp"></span><sup>o</sup>c</p>
+                          <p class="fs-5 mt-0 text-secondary"><span id="day1MinTemp"></span><sup>o</sup>c</p>
+                        </div>
+                        <div class="col text-center">
+                          <img id="weatherIcon1" src="" alt="" title="">
+                        </div>    
+                      </div>
+                    </div>   
+                    <div class="col border m-2">
+                      <div class="row weather-bg">
+                        <div class="col text-center">
+                          <p id="day2Date" class="fw-bold fs-6 mt-3">Fri 16th</p> 
+                        </div>
+                      </div>
+                      <div class="row weather-bg">
+                        <div class="col text-center">
+                          <p class="fw-bold fs-4 mb-0"><span id="day2MaxTemp"></span><sup>o</sup>c</p>
+                          <p class="fs-5 mt-0 text-secondary"><span id="day2MinTemp"></span><sup>o</sup>c</p>
+                        </div>
+                        <div class="col text-center">
+                          <img id="weatherIcon2" src="" alt="" title="">
+                        </div>    
+                      </div>
+                    </div>         
+                 </div>                    
                 </div>
+
                 <div class="modal-footer">
                   <button type="button" class="btn btn-outline-warning btn-sm" data-bs-dismiss="modal">Close</button>
                 </div>
@@ -189,54 +186,49 @@
           <div id="currencyInfo" class="modal" data-bs-backdrop="false" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content shadow">
-                <div class="modal-header bg-danger bg-gradient text-white">
-                  <h5 class="modal-title">Currency Info</h5>
+                <div class="modal-header bg-info bg-gradient text-white">
+                  <h5 class="modal-title">Currency Converter</h5>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <table class="table table-striped">
-                    <tr>
-                      <td class="text-center"><i class="fa-solid fa-coins fa-xl text-danger"></i></td>
-                      <td>Currency</td>
-                      <td id="currency" class="text-end">Select a Country</td>
-                    </tr>
-                    <tr>
-                      <td class="text-center"><i class="fa-solid fa-money-bill-1 fa-xl text-danger"></i></td>
-                      <td>Iso-Code</td>
-                      <td id="currencyCode" class="text-end">Select a Country</td>
-                    </tr>  
-                    <tr>
-                      <td class="text-center"><i class="fa-solid fa-dollar-sign fa-xl text-danger"></i></td>
-                      <td>Symbol</td>
-                      <td id="currencySymbol" class="text-end">Select a Country</td>
-                    </tr> 
-                    <tr>
-                      <td class="text-center"><i class="fa-solid fa-money-bill-transfer fa-xl text-danger"></i></td>
-                      <td>Exchange Rate to USD</td>
-                      <td id="exchangeRate" class="text-end">Select a Country</td>
-                    </tr>      
-                  </table>
+                  <form>
+                    <div class="form-floating mb-3">
+                      <input id="amount" type="number" class="form-control" value="1" min="1" step="1">
+                      <label for="amount">From USD</label>
+                    </div>
+          
+                    <div class="form-floating mb-3">
+                      <input id="convertTo" type="text" class="form-control" disabled>
+                      <label for="convertTo">Convert to</label>
+                    </div>
+
+                    <div class="form-floating">
+                      <input id="result" type="text" class="form-control" disabled>
+                      <label for="result">Result</label>
+                    </div>
+                  </form>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Close</button>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Flag Modal -->
-          <div id="flagInfo" class="modal" data-bs-backdrop="false" tabindex="-1">
+          <!-- News Modal -->
+          <div id="news" class="modal" data-bs-backdrop="false" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content shadow">
-                <div class="modal-header bg-info bg-gradient text-white">
-                  <h5 class="modal-title">Flag</h5>
+                <div class="modal-header bg-danger bg-gradient text-white">
+                  <h5 id="newsModalTitle" class="modal-title">BREAKING NEWS</h5>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                  <img id="flag" src="">
+
+                <div id="newsModal" class="modal-body text-start">
                 </div>
+
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Close</button>
                 </div>
               </div>
             </div>
@@ -247,14 +239,15 @@
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content shadow">
                 <div class="modal-header bg-secondary bg-gradient text-white">
-                  <h5 class="modal-title">Wikipedia Links</h5>
+                  <h5 class="modal-title">Further Information</h5>
                   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                  <p id="desc"></p>
                   <table class="table table-striped">
                     <tr>
                       <td class="text-center"><i class="fa-solid fa-link fa-xl text-secondary"></i></td>
-                      <td>Wikipedia Link</td>
+                      <td class="text-start">Wikipedia Link</td>
                       <td class="text-end"><a id="wikiLink" href="">Select a Country</a></td>
                     </tr>     
                   </table>
@@ -271,14 +264,14 @@
         </div>
       </div>
 
-		<div id="preloader"></div>
-
-    <script src="https://kit.fontawesome.com/ad455a77c4.js" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>	
+    <script src="./libs/js/fontawesome.js"></script>
+    <script src="./node_modules/leaflet/dist/leaflet.js"></script>
+    <script src="./node_modules/leaflet-easybutton/src/easy-button.js"></script>
+    <script src="./node_modules/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 		<script type="application/javascript" src="libs/js/jquery-2.2.3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-		<script type="module" src="libs/js/script.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./node_modules/numeral/min/numeral.min.js"></script>
+		<script type="application/javascript" src="libs/js/script.js"></script>
 	</body>
 
 </html>

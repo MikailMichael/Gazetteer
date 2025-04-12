@@ -2,16 +2,13 @@
 	$executionStartTime = microtime(true);
 
 	// Creates url for the API call with the entered parameters, passed via data section in AJAX call in script.js
-	$url='https://countries-cities.p.rapidapi.com/location/country/' . $_REQUEST['isoCode'];
+	$url='http://api.geonames.org/searchJSON?formatted=true&q=airport&maxRows=20&lang=en&country=' . $_REQUEST['isoCode'] . '&username=flightltd&style=full';
 
 	// Init cURL obj, sets common parameters
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_URL,$url);
-  	curl_setopt($ch, CURLOPT_HTTPHEADER, [
-		"X-RapidAPI-Key: 3f5251fc0emsheed3a2ec44d8de3p17ccc1jsn7d06cc99155f"
-	]);
 
 	// Execute cURL obj, stores the results in $result
 	$result = curl_exec($ch);
@@ -20,7 +17,8 @@
 
 	curl_close($ch);
 
-	
+	$finalResult = [];
+
 	if ($cURLERROR) {
 
 		$output['status']['code'] = $cURLERROR;
@@ -29,7 +27,7 @@
 		$output['status']['seconds'] = number_format((microtime(true) - $executionStartTime), 3);
 		$output['data'] = null;
 	
-	} else {
+	  } else {
 		$decode = json_decode($result,true);
 
 		if (json_last_error() !== JSON_ERROR_NONE) {
@@ -39,37 +37,33 @@
 			$output['status']['seconds'] = number_format((microtime(true) - $executionStartTime), 3);
 			$output['data'] = null;			 
 		} else {
-			if(!$decode['name']) {
-				$output['status']['code'] = 404;
+			if (isset($decode['status'])) {
+				$output['status']['code'] = $decode['status']["value"];
 				$output['status']['name'] = "Failure - API";
-				$output['status']['description'] = "No City Details Found.";
+				$output['status']['description'] = $weather['status']['message'];
 				$output['status']['seconds'] = number_format((microtime(true) - $executionStartTime), 3);
 				$output['data'] = null;
 			} else {
-				$finalResult = [
-					"capital" => $decode["capital"]["name"],
-					"area_size" => $decode["area_size"],
-					"phone_code" => $decode["phone_code"],
-					"population" => $decode["population"],
-					"flag" => $decode["flag"]["file"],
-					"wikiLink" => $decode["wiki_url"],
-					"continent" => $decode["continent"]["name"],
-					"total_cities" => $decode["total_cities"],
-					"name" => $decode["name"]
-				];
-				
+				foreach ($decode["geonames"] as $airport) {
+					$temp = null;
+					$temp['lat'] = $airport["lat"];
+					$temp['lng'] = $airport["lng"];
+					$temp['asciiName'] = $airport["asciiName"];
+					array_push($finalResult, $temp);
+				}
+
 				$output['status']['code'] = "200";
 				$output['status']['name'] = "ok";
 				$output['status']['description'] = "success";
 				$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
 				$output['data'] = $finalResult; 
 			}
-		}
-	}	
+		} 
+	  }
 
 	// Correct header information for JSON is set.
 	header('Content-Type: application/json; charset=UTF-8');
-	
+
 	// Output converted to JSON before sending
 	echo json_encode($output); 
 

@@ -2,25 +2,23 @@
 	$executionStartTime = microtime(true);
 
 	// Creates url for the API call with the entered parameters, passed via data section in AJAX call in script.js
-	$url='https://countries-cities.p.rapidapi.com/location/country/' . $_REQUEST['isoCode'];
+	$url='https://newsdata.io/api/1/news?apikey=pub_333409e4949c8327db04c8b442450c1b925e8&language=en&category=top&image=1&country=' . $_REQUEST['code'];
 
 	// Init cURL obj, sets common parameters
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_URL,$url);
-  	curl_setopt($ch, CURLOPT_HTTPHEADER, [
-		"X-RapidAPI-Key: 3f5251fc0emsheed3a2ec44d8de3p17ccc1jsn7d06cc99155f"
-	]);
 
 	// Execute cURL obj, stores the results in $result
-	$result = curl_exec($ch);
+	$result=curl_exec($ch);
 
 	$cURLERROR = curl_errno($ch);
 
 	curl_close($ch);
 
-	
+	$finalResult = [];
+
 	if ($cURLERROR) {
 
 		$output['status']['code'] = $cURLERROR;
@@ -39,25 +37,22 @@
 			$output['status']['seconds'] = number_format((microtime(true) - $executionStartTime), 3);
 			$output['data'] = null;			 
 		} else {
-			if(!$decode['name']) {
-				$output['status']['code'] = 404;
+			if($decode['status'] == "error") {
+				$output['status']['code'] = "404";
 				$output['status']['name'] = "Failure - API";
-				$output['status']['description'] = "No City Details Found.";
+				$output['status']['description'] = $decode["results"]['message'];
 				$output['status']['seconds'] = number_format((microtime(true) - $executionStartTime), 3);
 				$output['data'] = null;
 			} else {
-				$finalResult = [
-					"capital" => $decode["capital"]["name"],
-					"area_size" => $decode["area_size"],
-					"phone_code" => $decode["phone_code"],
-					"population" => $decode["population"],
-					"flag" => $decode["flag"]["file"],
-					"wikiLink" => $decode["wiki_url"],
-					"continent" => $decode["continent"]["name"],
-					"total_cities" => $decode["total_cities"],
-					"name" => $decode["name"]
-				];
-				
+				foreach ($decode["results"] as $article) {
+					$temp = null;
+					$temp['image_url'] = $article["image_url"];
+					$temp['title'] = $article["title"];
+					$temp['link'] = $article["link"];
+					$temp['source_id'] = $article["source_id"];
+					array_push($finalResult, $temp);
+				}
+
 				$output['status']['code'] = "200";
 				$output['status']['name'] = "ok";
 				$output['status']['description'] = "success";
@@ -65,11 +60,11 @@
 				$output['data'] = $finalResult; 
 			}
 		}
-	}	
+	}
 
 	// Correct header information for JSON is set.
 	header('Content-Type: application/json; charset=UTF-8');
-	
+
 	// Output converted to JSON before sending
 	echo json_encode($output); 
 
