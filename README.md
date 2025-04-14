@@ -57,6 +57,22 @@ To run this project locally:
 
     `composer install`
 
-4. Copy the sample environment file:
+4. Copy the sample environment file
 
-> ⚠️ This project uses PHP, so you may need to run it via a local server (e.g., XAMPP or PHP’s built-in server).
+    `cp .env.sample .env`
+
+5. Fill in your own API keys inside .env
+    ⚠️ API keys are required for the app to function correctly. You can get them by signing up for the relevant APIs listed below:
+      - [RapidAPICountriesCities API](https://rapidapi.com/natkapral/api/countries-cities/details)
+            ⚠️ You will need **Three** API keys from this API, otherwise it will cap your API calls if using only one key. Generate three keys and fill in *API_KEY_RAPIDAP*, *API_KEY_RAPIDAPI2* and *API_KEY_RAPIDAPI3* with them.
+      - [OpenCage API](https://opencagedata.com/api)
+      - [GeoNames API](https://www.geonames.org/)
+      - [NewsData API](https://newsdata.io/)
+      - [OpenExchangeRates API](https://openexchangerates.org/)
+      - [OpenWeatherMap API](https://openweathermap.org/)
+
+6. This project uses PHP, so you may need to run it via a local server (e.g., XAMPP or PHP’s built-in server). If using an IDE such as Visual Studio Code, you can start PHP's built-in server
+
+    `php -S localhost:8000`
+
+7. Open your web browser, and go to (localhost:8000)
