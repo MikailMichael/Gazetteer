@@ -44,13 +44,17 @@ A responsive and interactive web app that allows users to explore countries acro
 To run this project locally:
 
 1. Clone the repo by opening the terminal and entering the command
+
    `git clone https://github.com/MikailMichael/Gazetteer.git`
 
 2. Navigate into the project folder using the terminal
+
    `cd Gazetteer`
 
 3. Install Node & Compuser packages
+
     `npm install`
+
     `composer install`
 
 4. Copy the sample environment file:
