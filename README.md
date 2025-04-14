@@ -11,13 +11,12 @@ A responsive and interactive web app that allows users to explore countries acro
 - 📰 Real-time news data for each country
 - 💵 Up-to-date exchange rates for each currency to the USD
 - 📡 Data fetched from multiple APIs:
-  - [RestCountries API](https://restcountries.com/)
-  - [OpenWeatherMap API](https://openweathermap.org/)
-  - [GeoNames API](https://www.geonames.org/)
+  - [RapidAPICountriesCities API](https://rapidapi.com/natkapral/api/countries-cities/details)
   - [OpenCage API](https://opencagedata.com/api)
+  - [GeoNames API](https://www.geonames.org/)
   - [NewsData API](https://newsdata.io/)
   - [OpenExchangeRates API](https://openexchangerates.org/)
-  - and more...
+  - [OpenWeatherMap API](https://openweathermap.org/)
  
 ## 📷 Demo
 
@@ -39,3 +38,21 @@ A responsive and interactive web app that allows users to explore countries acro
 
 ### Weather View
 //SCREENSHOT HERE//
+
+## 🚀 Getting Started
+
+To run this project locally:
+
+1. Clone the repo by opening the terminal and entering the command
+   `git clone https://github.com/MikailMichael/Gazetteer.git`
+
+2. Navigate into the project folder using the terminal
+   `cd Gazetteer`
+
+3. Install Node & Compuser packages
+    `npm install`
+    `composer install`
+
+4. Copy the sample environment file:
+
+> ⚠️ This project uses PHP, so you may need to run it via a local server (e.g., XAMPP or PHP’s built-in server).
