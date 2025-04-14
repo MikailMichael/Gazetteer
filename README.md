@@ -39,6 +39,16 @@ A responsive and interactive web app that allows users to explore countries acro
 ### Weather View
 ![Weather Modal](assets/weather-screenshot.png)
 
+## 📦 Prerequisites
+
+To run this project locally, make sure you have the following installed on your machine:
+
+- [Git](https://git-scm.com/downloads)
+- [PHP (v7.4+)](https://www.php.net/downloads)
+- [Composer](https://getcomposer.org/download/)
+- [Node.js + npm](https://nodejs.org/)
+- A code editor or IDE (e.g., [Visual Studio Code](https://code.visualstudio.com/))
+
 ## 🚀 Getting Started
 
 To run this project locally:
