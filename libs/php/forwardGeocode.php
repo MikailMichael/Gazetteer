@@ -1,10 +1,17 @@
 <?php
+	require_once __DIR__ . '/../../vendor/autoload.php';
+
+	$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+	$dotenv->load();
+	
+	$apikey = $_ENV['API_KEY_OPENCAGE'];
+
 	$executionStartTime = microtime(true);
 
 	$country = preg_replace('/\s+/', '+', $_REQUEST['name']);
 
 	// Creates url for the API call with the entered parameters, passed via data section in AJAX call in script.js
-	$url='https://api.opencagedata.com/geocode/v1/json?q=' . $country . '&countrycode=' . $_REQUEST['isoCode'] . '&key=87195934cb7444688d83a3d7eef993d2';
+	$url='https://api.opencagedata.com/geocode/v1/json?q=' . $country . '&countrycode=' . $_REQUEST['isoCode'] . '&key=' . $apikey;
 
 	// Init cURL obj, sets common parameters
 	$ch = curl_init();

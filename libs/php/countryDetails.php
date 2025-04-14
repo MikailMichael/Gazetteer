@@ -1,4 +1,11 @@
 <?php
+	require_once __DIR__ . '/../../vendor/autoload.php';
+
+	$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+	$dotenv->load();
+	
+	$apikey = $_ENV['API_KEY_RAPIDAPI2'];
+	
 	$executionStartTime = microtime(true);
 
 	// Creates url for the API call with the entered parameters, passed via data section in AJAX call in script.js
@@ -10,7 +17,7 @@
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_URL,$url);
   	curl_setopt($ch, CURLOPT_HTTPHEADER, [
-		"X-RapidAPI-Key: 3f5251fc0emsheed3a2ec44d8de3p17ccc1jsn7d06cc99155f"
+		"X-RapidAPI-Key: " . $apikey
 	]);
 
 	// Execute cURL obj, stores the results in $result

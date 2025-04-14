@@ -1,4 +1,11 @@
 <?php
+	require_once __DIR__ . '/../../vendor/autoload.php';
+
+	$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+	$dotenv->load();
+	
+	$apikey = $_ENV['API_KEY_GEONAMES'];
+	
 	// Initiates error reporting, allows routines to be run in browser
 	ini_set('display_errors', 'On');
 	error_reporting(E_ALL);
@@ -6,7 +13,7 @@
 	$executionStartTime = microtime(true);
 
 	// Creates url for the API call with the entered parameters, passed via data section in AJAX call in script.js
-	$url='http://api.geonames.org/oceanJSON?lat=' . $_REQUEST['lat'] . '&lng=' . $_REQUEST['lng'] . '&username=youroldpalcode';
+	$url='http://api.geonames.org/oceanJSON?lat=' . $_REQUEST['lat'] . '&lng=' . $_REQUEST['lng'] . '&username=' . $apikey;
 
 	// Init cURL obj, sets common parameters
 	$ch = curl_init();

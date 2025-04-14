@@ -1,8 +1,15 @@
 <?php
+	require_once __DIR__ . '/../../vendor/autoload.php';
+
+	$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+	$dotenv->load();
+	
+	$apikey = $_ENV['API_KEY_NEWSDATA'];
+
 	$executionStartTime = microtime(true);
 
 	// Creates url for the API call with the entered parameters, passed via data section in AJAX call in script.js
-	$url='https://newsdata.io/api/1/news?apikey=pub_333409e4949c8327db04c8b442450c1b925e8&language=en&category=top&image=1&country=' . $_REQUEST['code'];
+	$url='https://newsdata.io/api/1/news?apikey='. $apikey .'&language=en&category=top&image=1&country=' . $_REQUEST['code'];
 
 	// Init cURL obj, sets common parameters
 	$ch = curl_init();

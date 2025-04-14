@@ -1,8 +1,15 @@
 <?php
+	require_once __DIR__ . '/../../vendor/autoload.php';
+
+	$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+	$dotenv->load();
+	
+	$apikey = $_ENV['API_KEY_OPENWEATHER'];
+
 	$executionStartTime = microtime(true);
 
 	// Creates url for the API call with the entered parameters, passed via data section in AJAX call in script.js
-	$url='https://api.openweathermap.org/data/3.0/onecall?lat=' . $_REQUEST['lat'] . '&lon=' . $_REQUEST['lng'] . '&exclude=minutely,hourly,alerts&appid=e901305dcbd8c73cea96c1a966afff9a';
+	$url='https://api.openweathermap.org/data/3.0/onecall?lat=' . $_REQUEST['lat'] . '&lon=' . $_REQUEST['lng'] . '&exclude=minutely,hourly,alerts&appid=' . $apikey;
 
 	// Init cURL obj, sets common parameters
 	$ch = curl_init();

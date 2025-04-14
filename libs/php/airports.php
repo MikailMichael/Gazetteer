@@ -1,8 +1,15 @@
 <?php
+	require_once __DIR__ . '/../../vendor/autoload.php';
+
+	$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+	$dotenv->load();
+	
+	$apikey = $_ENV['API_KEY_GEONAMES'];
+
 	$executionStartTime = microtime(true);
 
 	// Creates url for the API call with the entered parameters, passed via data section in AJAX call in script.js
-	$url='http://api.geonames.org/searchJSON?formatted=true&q=airport&maxRows=20&lang=en&country=' . $_REQUEST['isoCode'] . '&username=flightltd&style=full';
+	$url='http://api.geonames.org/searchJSON?formatted=true&q=airport&maxRows=20&lang=en&country=' . $_REQUEST['isoCode'] . '&username=' . $apikey . '&style=full';
 
 	// Init cURL obj, sets common parameters
 	$ch = curl_init();

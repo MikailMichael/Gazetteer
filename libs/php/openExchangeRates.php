@@ -1,8 +1,15 @@
 <?php
+	require_once __DIR__ . '/../../vendor/autoload.php';
+
+	$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+	$dotenv->load();
+	
+	$apikey = $_ENV['API_KEY_OPENEXCHANGERATES'];
+
 	$executionStartTime = microtime(true);
 
 	// Creates url for the API call with the entered parameters, passed via data section in AJAX call in script.js
-	$url='https://openexchangerates.org/api/latest.json?app_id=a89c62aca421421ab616f038185f4e0f&base=USD';
+	$url='https://openexchangerates.org/api/latest.json?app_id=' . $apikey . '&base=USD';
 
 	// Init cURL obj, sets common parameters
 	$ch = curl_init();
