@@ -77,4 +77,4 @@ To run this project locally:
 
     `php -S localhost:8000`
 
-7. Open your web browser, and go to (localhost:8000)
+7. Open your web browser, and go to localhost:8000
