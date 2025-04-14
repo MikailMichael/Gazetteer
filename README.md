@@ -62,8 +62,10 @@ To run this project locally:
     `cp .env.sample .env`
 
 5. Fill in your own API keys inside .env
+
     ⚠️ API keys are required for the app to function correctly. You can get them by signing up for the relevant APIs listed below:
       - [RapidAPICountriesCities API](https://rapidapi.com/natkapral/api/countries-cities/details)
+            
             ⚠️ You will need **Three** API keys from this API, otherwise it will cap your API calls if using only one key. Generate three keys and fill in *API_KEY_RAPIDAP*, *API_KEY_RAPIDAPI2* and *API_KEY_RAPIDAPI3* with them.
       - [OpenCage API](https://opencagedata.com/api)
       - [GeoNames API](https://www.geonames.org/)
