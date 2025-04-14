@@ -59,11 +59,11 @@ To run this project locally:
 
 4. Copy the sample environment file
 
-    # Mac/Linux
+    #### Mac/Linux
     
     `cp .env.sample .env`
 
-    # Windows (Git Bash or Command Prompt)
+    #### Windows (Git Bash or Command Prompt)
     
     `copy .env.sample .env`
 
