@@ -2,6 +2,10 @@
 
 A responsive and interactive web app that allows users to explore countries across the globe. It fetches live data from multiple APIs to display information such as population, capital city, flags, timezones, weather, currency, news and more — all in a sleek, user-friendly UI
 
+## 📷 Demo
+
+![App Demo](assets/demo.gif)
+
 ## 🔎 Features
 
 - 🌐 Browse and search for countries using a dropdown menu with autocomplete input
@@ -17,10 +21,6 @@ A responsive and interactive web app that allows users to explore countries acro
   - [NewsData API](https://newsdata.io/)
   - [OpenExchangeRates API](https://openexchangerates.org/)
   - [OpenWeatherMap API](https://openweathermap.org/)
- 
-## 📷 Demo
-
-//GIF HERE//
 
 ## 🛠️ Tech Stack
 
@@ -34,10 +34,10 @@ A responsive and interactive web app that allows users to explore countries acro
 ## 🖼️ Screenshots
 
 ### Country Info View
-//SCREENSHOT HERE//
+![Country Info](assets/country-info-screenshot.png)
 
 ### Weather View
-//SCREENSHOT HERE//
+![Weather Modal](assets/weather-screenshot.png)
 
 ## 🚀 Getting Started
 
