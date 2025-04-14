@@ -51,7 +51,7 @@ To run this project locally:
 
    `cd Gazetteer`
 
-3. Install Node & Compuser packages
+3. Install Node & Composer packages
 
     `npm install`
 
@@ -59,7 +59,13 @@ To run this project locally:
 
 4. Copy the sample environment file
 
+    # Mac/Linux
+    
     `cp .env.sample .env`
+
+    # Windows (Git Bash or Command Prompt)
+    
+    `copy .env.sample .env`
 
 5. Fill in your own API keys inside .env
 
